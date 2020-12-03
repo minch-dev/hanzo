@@ -1,0 +1,58 @@
+﻿{
+    "name": "Hanzo",
+    "version": "192.168.0.1",
+	"description": "Word-by-word subtitle translator and Hanzi and Kanji breaker",
+    "options_page": "opt.htm",
+	"background": {
+		"scripts": [ "bg.js" ]
+	},
+    //"key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4r/pUHVPYQTn7vu3YHT52I0SKM15OBOTi0Jii4q5Koxd3Gdc/WXdqC2YgMA25J5PRiSubu/nHFf12Ubp3OZyNqB3j45ZscQ+tH1bwcV+cqdvv/Ik6VQaS6/qLmenLdFPKOCg/g1L1iKZu6Jjny6GlovpBj+7gjWQZBIoGBd70HQIDAQAB",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+          "matches": [ "https://www.youtube.com/*" ],
+          "js": [ "doc_end.js","yt.js"],
+          "run_at": "document_end"
+        },
+        {
+          "matches": [ "https://www.youtube.com/*" ],
+          "js": [ "doc_start.js","prims-basic.js","prims-alt.js"],
+          "run_at": "document_start"
+        }
+    ],
+    "web_accessible_resources": ["/yt.css"],
+    "permissions": [
+		//"http://youtube.com/*",
+		//"http://www.youtube.com/*",
+		//"contextMenus", //nice, custom menu opts
+		//"downloads", //not needed this time
+		//"clipboardWrite",
+		//"clipboardRead",
+		//"webRequest",
+		//"webRequestBlocking",
+		//"<all_urls>",
+		//"tabs",
+		"storage",
+		//"unlimitedStorage"
+		//"https://youtube.com/*",
+		"https://www.youtube.com/*"
+	],
+	"icons": {
+		"16": "icons/16.png",
+		"19": "icons/19.png",
+		"32": "icons/32.png",
+		"36": "icons/36.png",
+		"48": "icons/48.png",
+		"64": "icons/64.png",
+		"128": "icons/128.png"
+	},
+    "browser_action": {
+		"default_icon": {
+			"16": "icons/16.png",
+			"19": "icons/19.png",
+			"32": "icons/32.png"
+		},
+        "default_title": "Hanzo for your Hanzi",
+        "default_popup": "pop.htm"
+    }
+}

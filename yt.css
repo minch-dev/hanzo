@@ -1,0 +1,120 @@
+.ytp-caption-segment {
+	background: none !important;
+}
+
+
+.ytp-caption-segment >wrap {
+    /* border-right: solid 6px black; */
+    /* padding: 1px; */
+	
+    background: rgba(8, 8, 8, 0.75) !important;
+	font-size: 0.96em !important;
+	cursor: pointer;
+	
+}
+.ytp-caption-segment wrap,
+.ytp-caption-segment word
+{
+	vertical-align:top;
+	position: relative;
+}
+.ytp-caption-segment wrap:hover
+{
+	outline:1px solid red;
+}
+
+.ytp-caption-segment >wrap +wrap{
+	 margin-left: 3px !important;
+}
+
+.caption-visual-line:last-child .ytp-caption-segment >wrap:last-child{
+	background: rgba(255, 0, 0, 0.75) !important;
+}
+
+
+
+.ytp-caption-segment translation{
+	display:none;
+    position: absolute;
+	left:0;
+    bottom: 100%;
+	background: rgba(255, 255, 255, 0.85);
+    color: black;
+    border: dashed 1px;
+    padding: 0.25em;
+	line-height: 1;
+	cursor:text;
+	user-select: text;
+}
+.ytp-caption-segment translation:empty:before{
+	content:"Click to load";
+}
+
+.ytp-caption-segment wrap:nth-last-child(-n+5)  translation
+{
+    left:auto;
+    right:0;
+}
+.ytp-caption-segment wrap:nth-child(-n+3)  translation
+{
+    right:auto;
+    left:0;
+}
+
+
+.ytp-caption-segment wrap:hover >translation{
+	display:block;
+}
+
+.ytp-caption-segment meaning,
+.ytp-caption-segment pronunciation
+{
+	display:block;
+	text-transform: lowercase;
+}
+.ytp-caption-segment original{
+	white-space: nowrap;
+}
+.ytp-caption-segment original word{
+	font-size:2em;
+}
+
+.ytp-caption-segment meaning{
+	font-size: 0.8em;
+    white-space: nowrap;
+}
+.ytp-caption-segment pronunciation{
+	font-size: 0.7em;
+	font-weight: 100;
+    font-style: italic;
+}
+.ytp-caption-segment pronunciation:before,
+.ytp-caption-segment pronunciation:after
+{
+	content:'[';
+}
+.ytp-caption-segment pronunciation:after
+{
+	content:']';
+}
+
+.caption-visual-line,
+.captions-text,
+.caption-window
+{
+	overflow:visible !important;
+}
+
+.caption-window{
+	/* height: auto !important; */
+	width: auto !important;
+/*     top: auto !important;
+    bottom: 0 !IMPORTANT;
+    left: 0 !important;
+    right: auto !important;
+    margin-left: 0 !IMPORTANT;
+    margin-top: 0 !IMPORTANT;
+    margin-right: 0 !IMPORTANT;
+    margin-bottom: 50px !IMPORTANT; */
+}
+    
