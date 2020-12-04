@@ -1,7 +1,7 @@
 ﻿{
-    "name": "Hanzo",
+    "name": "Hanzō Sword",
     "version": "192.168.0.1",
-	"description": "Word-by-word subtitle translator and Hanzi and Kanji breaker",
+	"description": "Cuts Hanzi and Kanji compounds into primitives & translates Youtube™ subtitles word-by-word.",
     "options_page": "opt.htm",
 	"background": {
 		"scripts": [ "bg.js" ]
@@ -17,10 +17,11 @@
         {
           "matches": [ "https://www.youtube.com/*" ],
           "js": [ "doc_start.js","prims-basic.js","prims-alt.js"],
+          "css": [ "font.css"],
           "run_at": "document_start"
         }
     ],
-    "web_accessible_resources": ["/yt.css"],
+    "web_accessible_resources": ["/yt.css","/BabelStoneHan.woff2"],
     "permissions": [
 		//"http://youtube.com/*",
 		//"http://www.youtube.com/*",
@@ -33,8 +34,8 @@
 		//"<all_urls>",
 		//"tabs",
 		"storage",
-		//"unlimitedStorage"
-		//"https://youtube.com/*",
+		"unlimitedStorage",
+		"https://youtube.com/*",
 		"https://www.youtube.com/*"
 	],
 	"icons": {

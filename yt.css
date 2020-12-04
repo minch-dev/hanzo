@@ -6,7 +6,6 @@
 .ytp-caption-segment >wrap {
     /* border-right: solid 6px black; */
     /* padding: 1px; */
-	
     background: rgba(8, 8, 8, 0.75) !important;
 	font-size: 0.96em !important;
 	cursor: pointer;
@@ -18,6 +17,9 @@
 	vertical-align:top;
 	position: relative;
 }
+
+
+
 .ytp-caption-segment wrap:hover
 {
 	outline:1px solid red;
@@ -33,7 +35,7 @@
 
 
 
-.ytp-caption-segment translation{
+.ytp-caption-segment info{
 	display:none;
     position: absolute;
 	left:0;
@@ -46,23 +48,22 @@
 	cursor:text;
 	user-select: text;
 }
-.ytp-caption-segment translation:empty:before{
+.ytp-caption-segment info:empty:before{
 	content:"Click to load";
 }
 
-.ytp-caption-segment wrap:nth-last-child(-n+5)  translation
+.ytp-caption-segment wrap:nth-last-child(-n+5)  info
 {
     left:auto;
     right:0;
 }
-.ytp-caption-segment wrap:nth-child(-n+3)  translation
+.ytp-caption-segment wrap:nth-child(-n+3)  info
 {
     right:auto;
     left:0;
 }
 
-
-.ytp-caption-segment wrap:hover >translation{
+.ytp-caption-segment wrap:hover >info{
 	display:block;
 }
 

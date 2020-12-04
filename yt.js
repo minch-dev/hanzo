@@ -145,10 +145,19 @@ const clean_text = function(txt){
 	txt = txt.trim();
 	return txt;
 }
-const break_kanji = function(txt,callback){
-	//we need Heisig here when official particles are finished with
-	console.log(txt);
-	callback(Array.from(厶.composition[txt] || txt));
+const cut_kanji = function(txt,callback){
+	//console.log(txt);
+	var comp = 厶.composition[txt];
+	var cuts = [];
+	if(comp){
+		for(var c=0;c<comp.length;c++){
+			cuts.push(Array.from(comp[c]));
+		}
+	} else {
+		cuts.push(Array.from(txt));  //in case we don't have a composition
+	}
+	console.log(cuts);
+	callback(cuts);
 }
 const break_phrase = function(txt,callback){
 	//just simple break this time
@@ -156,10 +165,12 @@ const break_phrase = function(txt,callback){
 	txt = clean_text(txt);
 	console.log(txt);
 	if(txt.length>0){
-		if(txt.length>1){ //phrase
-			callback(Array.from(txt));
-		} else { //single kanji
-			break_kanji(txt,callback);
+		if(txt.length>1){
+			//phrase
+			callback([Array.from(txt)]); //[['単','戈']]
+		} else {
+			//single kanji
+			cut_kanji(txt,callback);
 		}
 	} else callback('');
 }
@@ -174,7 +185,9 @@ const create_tooltip = function(tooltip,json){
 	var original = create_node(tooltip,'original');
 	break_phrase(json.sentences[0].orig,function(kanji){
 		for(var k=0;k<kanji.length;k++){
-			create_text(original,kanji[k]);
+			for(var kk=0;kk<kanji[k].length;kk++){
+				create_text(original,kanji[k][kk]);
+			}
 		}
 		if(kanji.length > 0){
 			wrap_line(original);
@@ -188,7 +201,7 @@ const create_tooltip = function(tooltip,json){
 
 }
 const word_hover = function(event){
-	var tr = event.target.parentNode.getElementsByTagName('translation')[0];
+	var tr = event.target.parentNode.getElementsByTagName('info')[0];
 	if(tr.children.length  ==  0){
 		//console.log(event.target.innerText);
 		obtain_translation(event.target.innerText,function(json){
@@ -198,7 +211,7 @@ const word_hover = function(event){
 }
 const word_click = function(event){
 	event.stopPropagation();
-	var tr = event.target.parentNode.getElementsByTagName('translation')[0];
+	var tr = event.target.parentNode.getElementsByTagName('info')[0];
 	if(tr.children.length  ==  0){
 		obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
@@ -208,22 +221,22 @@ const word_click = function(event){
 const word_down = function(event){
 	event.stopPropagation();
 }
-const translation_hover = function(event){
+const info_hover = function(event){
 
 }
-const translation_click = function(event){
+const info_click = function(event){
 	event.stopPropagation();
 }
-const translation_down = function(event){
+const info_down = function(event){
 	event.stopPropagation();
 }
-const translation_drag = function(event){
+const info_drag = function(event){
 	event.stopPropagation();
 }
-const translation_selection = function(event){
+const info_selection = function(event){
 	event.stopPropagation();
 }
-const translation_move = function(event){
+const info_move = function(event){
 	event.stopPropagation();
 }
 const disable_propaganda = function(node){
@@ -250,19 +263,19 @@ const wrap_word = function(node){
 	var wrap = document.createElement("wrap");
 	disable_propaganda(wrap);
 	var word = document.createElement("word");
-	var translation = document.createElement("translation");
+	var info = document.createElement("info");
 	word.onmouseover = word_hover;
 	word.onmousedown = word_down;
 	word.onclick = word_click;
-	//translation.onmouseover = translation_hover;
-	//translation.onmousedown = translation_down;
-	//translation.onmousemove = translation_move;
-	//translation.onclick = translation_click;
-	//translation.ondrag = translation_drag;
-	//translation.onselectionchange  = translation_selection;
+	//info.onmouseover = info_hover;
+	//info.onmousedown = info_down;
+	//info.onmousemove = info_move;
+	//info.onclick = info_click;
+	//info.ondrag = info_drag;
+	//info.onselectionchange  = info_selection;
 	node.parentNode.insertBefore(wrap, node);
 	wrap.appendChild(word);
-	wrap.appendChild(translation);
+	wrap.appendChild(info);
 	word.appendChild(node);
 }
 const wrap_sub = function(node){

@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'BabelStoneHan';
+  src: url("./BabelStoneHan.woff2") format("woff2");
+}
+.ytp-caption-segment wrap translation word{
+	font-family: 'BabelStoneHan';
+}
