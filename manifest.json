@@ -21,7 +21,7 @@
           "run_at": "document_start"
         }
     ],
-    "web_accessible_resources": ["/yt.css","/BabelStoneHan.woff2"],
+    "web_accessible_resources": ["/yt.css","/BabelStoneHan.woff","/BabelStoneHan.ttf"],
     "permissions": [
 		//"http://youtube.com/*",
 		//"http://www.youtube.com/*",

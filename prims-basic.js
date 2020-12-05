@@ -29,6 +29,9 @@ if(!厶) var 厶 = function(){};
 //IDS-UCS-Ext-C
 𫂱:["⿲丿米丨"],
 
+//IDS-UCS-Ext-E
+𫠠:["⿻一乚"],
+
 //IDS-UCS-Ext-F
 𭔰:["⿰豆寸"],
 𮍛:["⿳自穴口"],//MJ000320

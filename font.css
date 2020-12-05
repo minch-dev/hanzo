@@ -1,7 +1,9 @@
 @font-face {
-  font-family: 'BabelStoneHan';
-  src: url("./BabelStoneHan.woff2") format("woff2");
+	font-family: 'BabelStone Han';
+	src: local("BabelStone Han Plain"), local("BabelStone Han"),
+	url("chrome-extension://__MSG_@@extension_id__/BabelStoneHan.woff") format("woff");
+	/*version 10.0.2 (2017-12-16)*/
 }
-.ytp-caption-segment wrap translation word{
-	font-family: 'BabelStoneHan';
+.ytp-caption-segment primitives word{
+	font-family: 'BabelStone Han Plain', 'BabelStone Han';
 }

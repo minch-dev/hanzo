@@ -163,11 +163,12 @@ const break_phrase = function(txt,callback){
 	//just simple break this time
 	//later we'll need to differentiate kanji from kana and other stuff
 	txt = clean_text(txt);
-	console.log(txt);
-	if(txt.length>0){
-		if(txt.length>1){
+	var broken = Array.from(txt);
+	//console.log(txt);
+	if(broken.length>0){
+		if(broken.length>1){
 			//phrase
-			callback([Array.from(txt)]); //[['単','戈']]
+			callback([broken]); //[['単','戈']]
 		} else {
 			//single kanji
 			cut_kanji(txt,callback);
@@ -182,15 +183,16 @@ const create_text = function(parent,data){
 }
 const create_tooltip = function(tooltip,json){
 	if(typeof(json) === 'undefined') return;
-	var original = create_node(tooltip,'original');
+	var primitives = create_node(tooltip,'primitives');
 	break_phrase(json.sentences[0].orig,function(kanji){
 		for(var k=0;k<kanji.length;k++){
 			for(var kk=0;kk<kanji[k].length;kk++){
-				create_text(original,kanji[k][kk]);
+				create_text(primitives,kanji[k][kk]);
 			}
+			create_node(primitives,'hr');
 		}
 		if(kanji.length > 0){
-			wrap_line(original);
+			wrap_line(primitives);
 		}
 		create_text(create_node(tooltip,'meaning'),json.sentences[0].trans);
 		create_text(create_node(tooltip,'pronunciation'),json.sentences[1].src_translit);

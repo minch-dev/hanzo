@@ -73,10 +73,10 @@
 	display:block;
 	text-transform: lowercase;
 }
-.ytp-caption-segment original{
+.ytp-caption-segment primitives{
 	white-space: nowrap;
 }
-.ytp-caption-segment original word{
+.ytp-caption-segment primitives word{
 	font-size:2em;
 }
 
