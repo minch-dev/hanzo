@@ -105,7 +105,7 @@ const fetch_gtx_translation = function(txt,callback){
 	})
 }
 const obtain_translation = function(txt,callback,online){
-	if(typeof(online) === 'undefined') var online = true;
+	if(typeof(online) === 'undefined') var online = false;
 	txt = clean_text(txt);
 	var cache_key = sl+'|'+tl+'|'+txt;
 	var usage_key = txt;
@@ -120,14 +120,24 @@ const obtain_translation = function(txt,callback,online){
 			}
 			//console.log(usage_count);
 			usage.put(usage_count+1,usage_key).onsuccess = function(event) {
-				if(json === undefined && online){
+				if(!json && online){
 					fetch_gtx_translation(txt,function(json){
 						//console.log('online:',json);
 						db('cache').put(json,cache_key).onsuccess = function(event) {
+							json.txt = txt;
+							json.obtained = true;
 							callback(json);
 						};
 					});
 				} else {
+					if(!json){
+						json = {};
+						json.obtained = false;
+					} else {
+						json.obtained = true;
+					}
+					json.txt = txt;
+
 					//console.log('cached:',json);
 					callback(json);
 				}
@@ -135,6 +145,19 @@ const obtain_translation = function(txt,callback,online){
 		}
 	};
 }
+
+const obtain_variations = function(kanji){
+	var variation_sequences = {};
+	//let's assume there can be more than one sequence where this kanji is mentioned in
+	for(key in 厶.variations){
+		var current_variation = Array.from(厶.variations[key]);
+		if( key == kanji || current_variation.indexOf(kanji)!=-1 ){
+			variation_sequences[key] = current_variation;
+		}
+	}
+	return variation_sequences;
+}
+
 const romaji_katakana= function(txt){
 	return txt;
 }
@@ -156,7 +179,7 @@ const cut_kanji = function(txt,callback){
 	} else {
 		cuts.push(Array.from(txt));  //in case we don't have a composition
 	}
-	console.log(cuts);
+	//console.log(cuts);
 	callback(cuts);
 }
 const break_phrase = function(txt,callback){
@@ -168,11 +191,12 @@ const break_phrase = function(txt,callback){
 	if(broken.length>0){
 		if(broken.length>1){
 			//phrase
-			callback([broken]); //[['単','戈']]
+			callback([broken]);
 		} else {
 			//single kanji
 			cut_kanji(txt,callback);
 		}
+		 //[['単','戈'],['単','単']]
 	} else callback('');
 }
 const create_node = function(parent,tag){
@@ -184,7 +208,8 @@ const create_text = function(parent,data){
 const create_tooltip = function(tooltip,json){
 	if(typeof(json) === 'undefined') return;
 	var primitives = create_node(tooltip,'primitives');
-	break_phrase(json.sentences[0].orig,function(kanji){
+	//json.sentences[0].orig
+	break_phrase(json.txt,function(kanji){
 		for(var k=0;k<kanji.length;k++){
 			for(var kk=0;kk<kanji[k].length;kk++){
 				create_text(primitives,kanji[k][kk]);
@@ -194,8 +219,28 @@ const create_tooltip = function(tooltip,json){
 		if(kanji.length > 0){
 			wrap_line(primitives);
 		}
-		create_text(create_node(tooltip,'meaning'),json.sentences[0].trans);
-		create_text(create_node(tooltip,'pronunciation'),json.sentences[1].src_translit);
+		if(json.obtained){
+			create_text(create_node(tooltip,'meaning'),json.sentences[0].trans);
+			create_text(create_node(tooltip,'pronunciation'),json.sentences[1].src_translit);
+		} else {
+			
+		}
+		var variation_sequences = obtain_variations(kanji);
+		if(Object.keys(variation_sequences).length){
+			var variations = create_node(tooltip,'variations');
+			
+			for(main_hanzi in variation_sequences){
+				create_text(variations,main_hanzi);
+				for(var v=0;v<variation_sequences[main_hanzi].length;v++){
+					create_text(variations,variation_sequences[main_hanzi][v]);
+				}
+				create_node(variations,'hr');
+			}
+			wrap_line(variations);
+			
+			console.log(variation_sequences);
+		}
+
 		//html += '<alternative>'+json.alternative_translations[0].alternative.+'</alternative>';
 		//html += '<hiragana>'+pronunciation+'</hiragana>';
 		//html += '<katakana>'+pronunciation+'</katakana>';
