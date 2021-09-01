@@ -253,7 +253,7 @@ const word_hover = function(event){
 		//console.log(event.target.innerText);
 		obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
-		},false);
+		},false); //online off
 	}
 }
 const word_click = function(event){

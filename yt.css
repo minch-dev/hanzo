@@ -48,9 +48,9 @@
 	cursor:text;
 	user-select: text;
 }
-.ytp-caption-segment info:empty:before{
+/* .ytp-caption-segment info:empty:before{
 	content:"Click to load";
-}
+} */
 
 .ytp-caption-segment wrap:nth-last-child(-n+5)  info
 {
@@ -78,7 +78,8 @@
 }
 .ytp-caption-segment primitives word{
 	font-size:2em;
-}
+	font-family: 'BabelStone Han Plain', 'BabelStone Han';
+}  
 
 .ytp-caption-segment meaning{
 	font-size: 0.8em;
@@ -118,4 +119,5 @@
     margin-right: 0 !IMPORTANT;
     margin-bottom: 50px !IMPORTANT; */
 }
-    
+  
+

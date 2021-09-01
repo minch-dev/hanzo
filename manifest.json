@@ -1,7 +1,7 @@
 ﻿{
     "name": "Hanzō Sword",
     "version": "192.168.0.1",
-	"description": "Cuts Hanzi and Kanji compounds into primitives & translates Youtube™ subtitles word-by-word.",
+	"description": "Cuts Hanzi/Hanja/Kanji compounds into primitives & translates Youtube™ subtitles word-by-word.",
     "options_page": "opt.htm",
 	"background": {
 		"scripts": [ "bg.js" ]
@@ -21,7 +21,11 @@
           "run_at": "document_start"
         }
     ],
-    "web_accessible_resources": ["/yt.css","/BabelStoneHan.woff","/BabelStoneHan.ttf"],
+    "web_accessible_resources": [
+		"/yt.css",
+		"/BabelStoneHan.woff",
+		"/BabelStoneHan.ttf"
+	],
     "permissions": [
 		//"http://youtube.com/*",
 		//"http://www.youtube.com/*",

@@ -1,9 +1,8 @@
 @font-face {
 	font-family: 'BabelStone Han';
 	src: local("BabelStone Han Plain"), local("BabelStone Han"),
-	url("chrome-extension://__MSG_@@extension_id__/BabelStoneHan.woff") format("woff");
+	url("chrome-extension://__MSG_@@extension_id__/BabelStoneHan.ttf");
+	
+	/* url("chrome-extension://__MSG_@@extension_id__/BabelStoneHan.woff") format("woff"); */
 	/*version 10.0.2 (2017-12-16)*/
-}
-.ytp-caption-segment primitives word{
-	font-family: 'BabelStone Han Plain', 'BabelStone Han';
 }
