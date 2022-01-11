@@ -4,7 +4,7 @@
 //const 简 = '简'; //简化字 jiǎnhuàzì  / simplified chinese
 //const 外 = '外'; //表外字 hyōgaiji 
 //'旧简外部'
-厶.variations = {
+Ħ.variations = {
 刀: '刂⺈刁𠚣釖',
 水: '⽔氺氵沝𡿭𣸕',
 服: '𠬝𦨈𠬩𠬮𠬨𢻮𦨕𨈞𦩟𣍞𦨊𦨋𤰇𦯞𤰈𠃰鞴𫖉𩍁𩍘𮧳𩌎韛𩏕𩏄𩏦䪖𩏃箙𥵩', 

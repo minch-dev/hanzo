@@ -1,5 +1,5 @@
 
-if(!厶) var 厶 = function(){}; //入兦厶囚囜𡆢
+if(!Ħ) var Ħ = function(){}; //入兦厶囚囜𡆢
 const config0 = { childList: true, subtree: true, attributes: false, characterData:false };
 const config1 = { childList: true, subtree: false, attributes: false, characterData:false };
 const MutationObserver = window.MutationObserver;
@@ -149,8 +149,8 @@ const obtain_translation = function(txt,callback,online){
 const obtain_variations = function(kanji){
 	var variation_sequences = {};
 	//let's assume there can be more than one sequence where this kanji is mentioned in
-	for(key in 厶.variations){
-		var current_variation = Array.from(厶.variations[key]);
+	for(key in Ħ.variations){
+		var current_variation = Array.from(Ħ.variations[key]);
 		if( key == kanji || current_variation.indexOf(kanji)!=-1 ){
 			variation_sequences[key] = current_variation;
 		}
@@ -170,7 +170,7 @@ const clean_text = function(txt){
 }
 const cut_kanji = function(txt,callback){
 	//console.log(txt);
-	var comp = 厶.composition[txt];
+	var comp = Ħ.composition[txt];
 	var cuts = [];
 	if(comp){
 		for(var c=0;c<comp.length;c++){
