@@ -4,18 +4,18 @@
 	"description": "Cuts Hanzi/Hanja/Kanji compounds into primitives & translates Youtube™ subtitles word-by-word.",
     "options_page": "opt.htm",
 	"background": {
-		"scripts": [ "bg.js" ]
+		"scripts": [ "kanjidic2.json","bg.js" ]
 	},
     //"key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4r/pUHVPYQTn7vu3YHT52I0SKM15OBOTi0Jii4q5Koxd3Gdc/WXdqC2YgMA25J5PRiSubu/nHFf12Ubp3OZyNqB3j45ZscQ+tH1bwcV+cqdvv/Ik6VQaS6/qLmenLdFPKOCg/g1L1iKZu6Jjny6GlovpBj+7gjWQZBIoGBd70HQIDAQAB",
     "manifest_version": 2,
     "content_scripts": [
         {
-          "matches": [ "https://www.youtube.com/*" ],
+          "matches": [ "*://*.youtube.com/*" ],
           "js": [ "doc_end.js","yt.js"],
           "run_at": "document_end"
         },
         {
-          "matches": [ "https://www.youtube.com/*" ],
+          "matches": [ "*://*.youtube.com/*" ],
           "js": [ "doc_start.js","prims-basic.js","prims-alt.js"],
           "css": [ "font.css"],
           "run_at": "document_start"
@@ -27,8 +27,6 @@
 		"/BabelStoneHan.ttf"
 	],
     "permissions": [
-		//"http://youtube.com/*",
-		//"http://www.youtube.com/*",
 		//"contextMenus", //nice, custom menu opts
 		//"downloads", //not needed this time
 		//"clipboardWrite",

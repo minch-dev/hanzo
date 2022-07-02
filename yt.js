@@ -1,5 +1,5 @@
 
-if(!Ħ) var Ħ = function(){}; //入兦厶囚囜𡆢
+if(!Ħ) var Ħ = function(){};
 const config0 = { childList: true, subtree: true, attributes: false, characterData:false };
 const config1 = { childList: true, subtree: false, attributes: false, characterData:false };
 const MutationObserver = window.MutationObserver;
@@ -104,7 +104,7 @@ const fetch_gtx_translation = function(txt,callback){
 		callback(json);
 	})
 }
-const obtain_translation = function(txt,callback,online){
+Ħ.obtain_translation = function(txt,callback,online){
 	if(typeof(online) === 'undefined') var online = false;
 	txt = clean_text(txt);
 	var cache_key = sl+'|'+tl+'|'+txt;
@@ -251,7 +251,7 @@ const word_hover = function(event){
 	var tr = event.target.parentNode.getElementsByTagName('info')[0];
 	if(tr.children.length  ==  0){
 		//console.log(event.target.innerText);
-		obtain_translation(event.target.innerText,function(json){
+		Ħ.obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
 		},false); //online off
 	}
@@ -260,7 +260,7 @@ const word_click = function(event){
 	event.stopPropagation();
 	var tr = event.target.parentNode.getElementsByTagName('info')[0];
 	if(tr.children.length  ==  0){
-		obtain_translation(event.target.innerText,function(json){
+		Ħ.obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
 		});
 	}
