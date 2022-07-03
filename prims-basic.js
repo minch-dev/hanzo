@@ -1,10 +1,8 @@
 //⿰	⿱⿲⿳⿴⿵⿶⿷⿸⿹⿺⿻
 //◱◲◳◰◫⊟⊞⊡⊠▤▥□◻▣
 //☊囙
-if(!Ħ) var Ħ = function(){};
 
-
-Ħ.composition = {
+const composition = {
 //Extra
 𠬝:["⿸卩又"],
 	

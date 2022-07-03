@@ -4,14 +4,14 @@
 	"description": "Cuts Hanzi/Hanja/Kanji compounds into primitives & translates Youtube™ subtitles word-by-word.",
     "options_page": "opt.htm",
 	"background": {
-		"scripts": [ "kanjidic2.js","bg.js" ]
+		"scripts": [ "message.js","kanjidic2.js","bg.js" ]
 	},
     //"key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4r/pUHVPYQTn7vu3YHT52I0SKM15OBOTi0Jii4q5Koxd3Gdc/WXdqC2YgMA25J5PRiSubu/nHFf12Ubp3OZyNqB3j45ZscQ+tH1bwcV+cqdvv/Ik6VQaS6/qLmenLdFPKOCg/g1L1iKZu6Jjny6GlovpBj+7gjWQZBIoGBd70HQIDAQAB",
     "manifest_version": 2,
     "content_scripts": [
         {
           "matches": [ "*://*.youtube.com/*" ],
-          "js": [ "doc_end.js","yt.js"],
+          "js": [ "doc_end.js","message.js","yt.js"],
           "run_at": "document_end"
         },
         {
@@ -55,7 +55,7 @@
 			"19": "icons/19.png",
 			"32": "icons/32.png"
 		},
-        "default_title": "Hanzo for your Hanzi",
+        "default_title": "Hanzō for your Hanzi",
         "default_popup": "pop.htm"
     }
 }

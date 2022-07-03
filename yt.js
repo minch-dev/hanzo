@@ -1,5 +1,4 @@
-
-if(!Ħ) var Ħ = function(){};
+//if(!Ħ) var Ħ = function(){};
 const config0 = { childList: true, subtree: true, attributes: false, characterData:false };
 const config1 = { childList: true, subtree: false, attributes: false, characterData:false };
 const MutationObserver = window.MutationObserver;
@@ -104,7 +103,7 @@ const fetch_gtx_translation = function(txt,callback){
 		callback(json);
 	})
 }
-Ħ.obtain_translation = function(txt,callback,online){
+function obtain_translation(txt,callback,online){
 	if(typeof(online) === 'undefined') var online = false;
 	txt = clean_text(txt);
 	var cache_key = sl+'|'+tl+'|'+txt;
@@ -120,27 +119,31 @@ const fetch_gtx_translation = function(txt,callback){
 			}
 			//console.log(usage_count);
 			usage.put(usage_count+1,usage_key).onsuccess = function(event) {
-				if(!json && online){
-					fetch_gtx_translation(txt,function(json){
-						//console.log('online:',json);
-						db('cache').put(json,cache_key).onsuccess = function(event) {
-							json.txt = txt;
-							json.obtained = true;
-							callback(json);
-						};
-					});
-				} else {
-					if(!json){
-						json = {};
-						json.obtained = false;
+				
+				message('dictionary',{'string':txt},function(dict){
+					if(!json && online){
+						fetch_gtx_translation(txt,function(json){
+							//console.log('online:',json);
+							db('cache').put(json,cache_key).onsuccess = function(event) {
+								json.txt = txt;
+								json.obtained = true;
+								json.dict = dict;
+								callback(json);
+							};
+						});
 					} else {
-						json.obtained = true;
+						if(!json){
+							json = {};
+							json.obtained = false;
+						} else {
+							json.obtained = true;
+						}
+						json.txt = txt;
+						json.dict = dict;
+						//console.log('cached:',json);
+						callback(json);
 					}
-					json.txt = txt;
-
-					//console.log('cached:',json);
-					callback(json);
-				}
+				});
 			};
 		}
 	};
@@ -149,8 +152,8 @@ const fetch_gtx_translation = function(txt,callback){
 const obtain_variations = function(kanji){
 	var variation_sequences = {};
 	//let's assume there can be more than one sequence where this kanji is mentioned in
-	for(key in Ħ.variations){
-		var current_variation = Array.from(Ħ.variations[key]);
+	for(key in variations){
+		var current_variation = Array.from(variations[key]);
 		if( key == kanji || current_variation.indexOf(kanji)!=-1 ){
 			variation_sequences[key] = current_variation;
 		}
@@ -170,7 +173,7 @@ const clean_text = function(txt){
 }
 const cut_kanji = function(txt,callback){
 	//console.log(txt);
-	var comp = Ħ.composition[txt];
+	var comp = composition[txt];
 	var cuts = [];
 	if(comp){
 		for(var c=0;c<comp.length;c++){
@@ -206,6 +209,7 @@ const create_text = function(parent,data){
 	return parent.appendChild(document.createTextNode(data));
 }
 const create_tooltip = function(tooltip,json){
+	console.log(json);
 	if(typeof(json) === 'undefined') return;
 	var primitives = create_node(tooltip,'primitives');
 	//json.sentences[0].orig
@@ -219,12 +223,19 @@ const create_tooltip = function(tooltip,json){
 		if(kanji.length > 0){
 			wrap_line(primitives);
 		}
+		
+		
 		if(json.obtained){
 			create_text(create_node(tooltip,'meaning'),json.sentences[0].trans);
 			create_text(create_node(tooltip,'pronunciation'),json.sentences[1].src_translit);
-		} else {
-			
 		}
+		if(json.dict){
+			create_text(create_node(tooltip,'meaning'),json.dict.meaning.en);
+			create_text(create_node(tooltip,'kunyomi'),json.dict.reading.ja_kun);
+			create_text(create_node(tooltip,'onyomi'),json.dict.reading.ja_on);
+		}
+		//2do readings should be separated and interactive with tooltips
+		//add hiragana descriptions
 		var variation_sequences = obtain_variations(kanji);
 		if(Object.keys(variation_sequences).length){
 			var variations = create_node(tooltip,'variations');
@@ -238,7 +249,7 @@ const create_tooltip = function(tooltip,json){
 			}
 			wrap_line(variations);
 			
-			console.log(variation_sequences);
+			//console.log(variation_sequences);
 		}
 
 		//html += '<alternative>'+json.alternative_translations[0].alternative.+'</alternative>';
@@ -251,18 +262,18 @@ const word_hover = function(event){
 	var tr = event.target.parentNode.getElementsByTagName('info')[0];
 	if(tr.children.length  ==  0){
 		//console.log(event.target.innerText);
-		Ħ.obtain_translation(event.target.innerText,function(json){
+		obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
-		},false); //online off
+		},false); //online off for hover
 	}
 }
 const word_click = function(event){
 	event.stopPropagation();
 	var tr = event.target.parentNode.getElementsByTagName('info')[0];
 	if(tr.children.length  ==  0){
-		Ħ.obtain_translation(event.target.innerText,function(json){
+		obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
-		});
+		}); // oh, but if you insist on online translation...
 	}
 }
 const word_down = function(event){

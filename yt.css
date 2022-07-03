@@ -71,7 +71,7 @@
 .ytp-caption-segment pronunciation
 {
 	display:block;
-	text-transform: lowercase;
+	/*text-transform: lowercase;*/
 }
 .ytp-caption-segment primitives{
 	white-space: nowrap;
