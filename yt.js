@@ -2,30 +2,12 @@
 const config0 = { childList: true, subtree: true, attributes: false, characterData:false };
 const config1 = { childList: true, subtree: false, attributes: false, characterData:false };
 const MutationObserver = window.MutationObserver;
-var idb;
-const idb_open = indexedDB.open('translation',1);
+
+
 //initialising the db's
-//cache key: ja|en|克服切
-//usage key: ja|克服切
-idb_open.onerror = function(event) {
-  // Handle errors.
-};
-idb_open.onupgradeneeded = function(event) {
-  idb = event.target.result;
-  idb.createObjectStore("cache");
-  idb.createObjectStore("usage");
-};
+//cache key: 克服切 ["ja|en"]
+var bro = chrome || browser;
 
-idb_open.onsuccess = function(event) {
-	idb = event.target.result;
-	idb.onerror = function(event) {
-		console.log("cache idb error: " + event.target.errorCode);
-	};
-};
-
-const db = function(store){
-	return idb.transaction([store], 'readwrite').objectStore(store);
-}
 
 const onElementInserted = function(containerSelector, elementSelector, callback) {
     var onMutationsObserved = function(mutations) {
@@ -103,50 +85,49 @@ const fetch_gtx_translation = function(txt,callback){
 		callback(json);
 	})
 }
+//chrome.storage.sync.get(console.log)
+//chrome.storage.sync.clear()
 function obtain_translation(txt,callback,online){
 	if(typeof(online) === 'undefined') var online = false;
-	txt = clean_text(txt);
-	var cache_key = sl+'|'+tl+'|'+txt;
-	var usage_key = txt;
-	db('cache').get(cache_key).onsuccess = function(event) {
-		var json = event.target.result;
-		var usage = db('usage');
-		//console.log(json);
-		usage.get(usage_key).onsuccess = function(event) {
-			var usage_count = event.target.result;
-			if(usage_count === undefined){
-				usage_count = 0;
-			}
-			//console.log(usage_count);
-			usage.put(usage_count+1,usage_key).onsuccess = function(event) {
-				
-				message('dictionary',{'string':txt},function(dict){
-					if(!json && online){
-						fetch_gtx_translation(txt,function(json){
-							//console.log('online:',json);
-							db('cache').put(json,cache_key).onsuccess = function(event) {
-								json.txt = txt;
-								json.obtained = true;
-								json.dict = dict;
-								callback(json);
-							};
-						});
-					} else {
-						if(!json){
-							json = {};
-							json.obtained = false;
-						} else {
-							json.obtained = true;
-						}
-						json.txt = txt;
-						json.dict = dict;
-						//console.log('cached:',json);
-						callback(json);
-					}
-				});
-			};
+	var key = clean_text(txt);
+	var from_to = sl+'-'+tl;
+	bro.storage.sync.get(key,function(result) {
+		var json = result[key];
+		if(!json){
+			json = {};
 		}
-	};
+		if(!json.c){
+			json.c = 0;
+		}
+		json.c += 1;
+		//request built-in dictionary info
+		message('dictionary',{'string':key},function(dict){
+			//if we still don't have from-to translation, get it
+			if(!json[from_to] && online){
+				//console.log('trying fetch'+key);
+				fetch_gtx_translation(key,function(gtx_result){
+					//console.log('online:',json);
+					json[from_to] = gtx_result;
+					bro.storage.sync.set({[key]:json},function(result) {
+						json.txt = key;
+						json.obtained = true;
+						json.dict = dict;
+						callback(json);
+					});
+				});
+			//otherwise, if we're not in the mood to fetch translation or there is a translation already
+			} else {
+				//we just update the counter and show the translation
+				bro.storage.sync.set({[key]:json},function(result) {
+					json.obtained = !!json[from_to];
+					json.txt = key;
+					json.dict = dict;
+					//console.log('cached:',json);
+					callback(json);
+				});
+			}
+		});
+	});
 }
 
 const obtain_variations = function(kanji){
@@ -208,8 +189,16 @@ const create_node = function(parent,tag){
 const create_text = function(parent,data){
 	return parent.appendChild(document.createTextNode(data));
 }
+
+const clean_tooltip = function(tooltip){
+	var end=tooltip.childNodes.length-1;
+	for(var t=end;t>=0;t--){
+		tooltip.childNodes[t].remove();
+	}
+}
 const create_tooltip = function(tooltip,json){
-	console.log(json);
+	var from_to = sl+'-'+tl;
+	clean_tooltip(tooltip);
 	if(typeof(json) === 'undefined') return;
 	var primitives = create_node(tooltip,'primitives');
 	//json.sentences[0].orig
@@ -226,8 +215,8 @@ const create_tooltip = function(tooltip,json){
 		
 		
 		if(json.obtained){
-			create_text(create_node(tooltip,'meaning'),json.sentences[0].trans);
-			create_text(create_node(tooltip,'pronunciation'),json.sentences[1].src_translit);
+			create_text(create_node(tooltip,'translation'),json[from_to].sentences[0].trans);
+			create_text(create_node(tooltip,'pronunciation'),json[from_to].sentences[1].src_translit);
 		}
 		if(json.dict){
 			create_text(create_node(tooltip,'meaning'),json.dict.meaning.en);
@@ -255,10 +244,6 @@ const create_tooltip = function(tooltip,json){
 			
 			//console.log(variation_sequences);
 		}
-
-		//html += '<alternative>'+json.alternative_translations[0].alternative.+'</alternative>';
-		//html += '<hiragana>'+pronunciation+'</hiragana>';
-		//html += '<katakana>'+pronunciation+'</katakana>';
 	});
 
 }
@@ -274,10 +259,11 @@ const word_hover = function(event){
 const word_click = function(event){
 	event.stopPropagation();
 	var tr = event.target.parentNode.getElementsByTagName('info')[0];
-	if(tr.children.length  ==  0){
+	var translation = event.target.parentNode.getElementsByTagName('translation');
+	if(!translation.length){
 		obtain_translation(event.target.innerText,function(json){
 			if(json) create_tooltip(tr,json);
-		}); // oh, but if you insist on online translation...
+		},true); // oh, but if you insist on online translation...
 	}
 }
 const word_down = function(event){

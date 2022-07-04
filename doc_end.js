@@ -1,8 +1,8 @@
 (function(){
-	
+	var bro = chrome || browser;
     function addJss(file){
         var js = document.createElement('script');
-        js.src = chrome.runtime.getURL(file);
+        js.src = bro.runtime.getURL(file);
 		
         document.head.appendChild(js);
     }
@@ -11,7 +11,7 @@
         var css = document.createElement('link');
 		if(rel=='icon') css.type="image/png";
         css.rel = rel;
-        css.href = chrome.runtime.getURL(file);
+        css.href = bro.runtime.getURL(file);
         document.head.appendChild(css);
     }
 

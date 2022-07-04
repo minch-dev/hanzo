@@ -1,8 +1,10 @@
 function nothing(){
 	//nothing!
 }
+var bro = chrome || browser;
+
 //just execute whatever part of the extension told you to execute
-chrome.runtime.onMessage.addListener(
+bro.runtime.onMessage.addListener(
 	function(request, sender, callback) {
 		if(typeof this[request.action] === 'function'){
 			this[request.action](request.params,callback);
@@ -17,8 +19,8 @@ function message(action,params,callback){
 	if(typeof params === 'undefined'){
 		params = {};
 	}
-	chrome.runtime.sendMessage({action:action,params:params},function(response){
-		if (chrome.runtime.lastError) { //needed for chrome to shut up
+	bro.runtime.sendMessage({action:action,params:params},function(response){
+		if (bro.runtime.lastError) { //needed for bro to shut up
 			console.log('establishing extension connections');
 		} else {
 			callback(response);
