@@ -231,8 +231,12 @@ const create_tooltip = function(tooltip,json){
 		}
 		if(json.dict){
 			create_text(create_node(tooltip,'meaning'),json.dict.meaning.en);
-			create_text(create_node(tooltip,'kunyomi'),json.dict.reading.ja_kun);
-			create_text(create_node(tooltip,'onyomi'),json.dict.reading.ja_on);
+			if(json.dict.reading.ja_kun){
+				create_text(create_node(tooltip,'kunyomi'),json.dict.reading.ja_kun);
+			}
+			if(json.dict.reading.ja_on){
+				create_text(create_node(tooltip,'onyomi'),json.dict.reading.ja_on);
+			}
 		}
 		//2do readings should be separated and interactive with tooltips
 		//add hiragana descriptions
