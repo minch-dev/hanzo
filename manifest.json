@@ -1,5 +1,5 @@
 ﻿{
-    "name": "Hanzō Sword",
+    "name": "Hanzō",
     "version": "192.168.0.1",
 	"description": "Cuts Hanzi/Hanja/Kanji compounds into primitives & translates Youtube™ subtitles word-by-word.",
     "options_page": "opt.htm",
